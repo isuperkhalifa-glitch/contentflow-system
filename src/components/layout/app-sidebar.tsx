@@ -5,25 +5,44 @@ import { usePathname } from "next/navigation"
 import { Menu, Sparkles, X } from "lucide-react"
 import { useState } from "react"
 
+import { LogoutButton } from "@/components/auth/logout-button"
 import { mainNavigation, settingsNavigation } from "@/lib/navigation"
 
+export type SidebarUser = {
+  name: string
+  email: string
+}
+
 type SidebarContentProps = {
+  user: SidebarUser
   onNavigate?: () => void
 }
 
-function SidebarContent({ onNavigate }: SidebarContentProps) {
+function getInitial(name: string) {
+  return name.trim().charAt(0) || "م"
+}
+
+function SidebarContent({ user, onNavigate }: SidebarContentProps) {
   const pathname = usePathname()
 
   return (
     <div className="flex h-full flex-col bg-white">
       <div className="flex h-20 items-center justify-between border-b border-slate-100 px-5">
-        <Link href="/dashboard" className="flex items-center gap-3" onClick={onNavigate}>
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-3"
+          onClick={onNavigate}
+        >
           <span className="grid size-10 place-items-center rounded-2xl bg-slate-950 text-white shadow-sm">
             <Sparkles className="size-4" />
           </span>
           <span>
-            <span className="block text-lg font-black tracking-tight">ContentFlow</span>
-            <span className="block text-xs text-slate-500">إدارة المحتوى بوضوح</span>
+            <span className="block text-lg font-black tracking-tight">
+              ContentFlow
+            </span>
+            <span className="block text-xs text-slate-500">
+              إدارة المحتوى بوضوح
+            </span>
           </span>
         </Link>
       </div>
@@ -36,7 +55,8 @@ function SidebarContent({ onNavigate }: SidebarContentProps) {
         <nav className="space-y-1">
           {mainNavigation.map((item) => {
             const Icon = item.icon
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`)
+            const active =
+              pathname === item.href || pathname.startsWith(`${item.href}/`)
 
             return (
               <Link
@@ -54,7 +74,9 @@ function SidebarContent({ onNavigate }: SidebarContentProps) {
                 {item.count ? (
                   <span
                     className={`rounded-full px-2 py-0.5 text-[11px] ${
-                      active ? "bg-white/15 text-white" : "bg-slate-200 text-slate-700"
+                      active
+                        ? "bg-white/15 text-white"
+                        : "bg-slate-200 text-slate-700"
                     }`}
                   >
                     {item.count}
@@ -89,28 +111,29 @@ function SidebarContent({ onNavigate }: SidebarContentProps) {
         })}
 
         <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3">
-          <div className="grid size-10 place-items-center rounded-xl bg-slate-900 text-sm font-black text-white">
-            خ
+          <div className="grid size-10 shrink-0 place-items-center rounded-xl bg-slate-900 text-sm font-black text-white">
+            {getInitial(user.name)}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-black">خليفة</p>
-            <p className="truncate text-xs text-slate-500">مدير النظام</p>
+            <p className="truncate text-sm font-black">{user.name}</p>
+            <p className="truncate text-xs text-slate-500">{user.email}</p>
           </div>
+          <LogoutButton />
         </div>
       </div>
     </div>
   )
 }
 
-export function DesktopSidebar() {
+export function DesktopSidebar({ user }: { user: SidebarUser }) {
   return (
     <aside className="fixed inset-y-0 right-0 z-30 hidden w-72 border-l border-slate-200 lg:block">
-      <SidebarContent />
+      <SidebarContent user={user} />
     </aside>
   )
 }
 
-export function MobileSidebar() {
+export function MobileSidebar({ user }: { user: SidebarUser }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -141,10 +164,14 @@ export function MobileSidebar() {
             >
               <X className="size-4" />
             </button>
-            <SidebarContent onNavigate={() => setOpen(false)} />
+            <SidebarContent
+              user={user}
+              onNavigate={() => setOpen(false)}
+            />
           </aside>
         </div>
       ) : null}
     </>
   )
 }
+

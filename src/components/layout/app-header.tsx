@@ -3,25 +3,31 @@
 import { Bell, Plus, Search } from "lucide-react"
 import { usePathname } from "next/navigation"
 
+import {
+  MobileSidebar,
+  type SidebarUser,
+} from "@/components/layout/app-sidebar"
 import { mainNavigation, settingsNavigation } from "@/lib/navigation"
-import { MobileSidebar } from "@/components/layout/app-sidebar"
 
-export function AppHeader() {
+export function AppHeader({ user }: { user: SidebarUser }) {
   const pathname = usePathname()
   const currentItem = [...mainNavigation, ...settingsNavigation].find(
-    (item) => pathname === item.href || pathname.startsWith(`${item.href}/`)
+    (item) =>
+      pathname === item.href || pathname.startsWith(`${item.href}/`)
   )
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
       <div className="flex h-20 items-center gap-3 px-4 sm:px-6 lg:px-8">
-        <MobileSidebar />
+        <MobileSidebar user={user} />
 
         <div className="min-w-0">
           <p className="truncate text-sm font-black text-slate-900">
             {currentItem?.label ?? "ContentFlow"}
           </p>
-          <p className="hidden text-xs text-slate-500 sm:block">مساحة إدارة المحتوى</p>
+          <p className="hidden text-xs text-slate-500 sm:block">
+            مساحة إدارة المحتوى
+          </p>
         </div>
 
         <div className="mr-auto flex items-center gap-2">
