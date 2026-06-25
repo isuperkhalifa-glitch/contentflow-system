@@ -5,8 +5,13 @@ import { LoaderCircle, Plus, X } from "lucide-react"
 
 import {
   createBrandAction,
-  initialBrandActionState,
+  type BrandActionState,
 } from "@/app/(workspace)/brands/actions"
+
+const initialBrandActionState: BrandActionState = {
+  status: "idle",
+  message: "",
+}
 
 type FieldErrorProps = {
   errors?: string[]
