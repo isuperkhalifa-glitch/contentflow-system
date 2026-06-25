@@ -47,11 +47,6 @@ export type BrandActionState = {
   fieldErrors?: Record<string, string[]>
 }
 
-export const initialBrandActionState: BrandActionState = {
-  status: "idle",
-  message: "",
-}
-
 function normalizeSlug(value: string) {
   return value
     .normalize("NFKD")
