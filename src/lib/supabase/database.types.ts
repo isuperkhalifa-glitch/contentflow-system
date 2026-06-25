@@ -1,4 +1,4 @@
-﻿export type AppRole =
+export type AppRole =
   | "system_developer"
   | "administrator"
   | "content_manager"
@@ -112,7 +112,7 @@ export type ContentItem = {
   body_copy: string | null
   call_to_action: string | null
   brief: Json
-  references: Json
+  reference_links: Json
   final_assets: Json
   created_by: string
   content_writer_id: string | null
